@@ -38,3 +38,5 @@ nosetests.xml
 # Komodo
 .komodotools/
 *.komodoproject
+
+settings.cfg
