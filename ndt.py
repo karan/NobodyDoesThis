@@ -9,6 +9,7 @@ import praw
 
 USER_AGENT = '/u/NobodyDoesThis by /u/karangoeluw'
 
+
 r = praw.Reddit(user_agent=USER_AGENT)
 
 print '[*] Reading config file...'
@@ -16,7 +17,7 @@ config = ConfigParser.ConfigParser()
 config.read('settings.cfg')
 username = config.get('auth', 'username')
 password = config.get('auth', 'password')
-print '[*] Logging in...'
+print '[*] Logging in as %s...' % username
 r.login(username, password)
 print '[*] Login successful...\n'
 
@@ -25,11 +26,20 @@ dae = r.get_subreddit('DoesAnybodyElse') # praw.objects.Subreddit
 print '[*] Getting submissions...\n'
 submissions = dae.get_hot(limit=None) # get new posts
 
-alread_done = set()
+already_done = set()
 
 for submission in submissions:
-    if submission.id not in alread_done:
-        alread_done.add(submission.id)
+    if submission.id not in already_done:
+        already_done.add(submission.id)
+        
+        comments = submission.comments
+        for comment in comments:
+            try:
+                if comment.author == username:
+                    continue
+            except AttributeError:
+                pass
+        
         print '[*] Thread: %s' % submission.title
         created = datetime.fromtimestamp(submission.created_utc) # epoch to datetime
         diff = (datetime.now() - created).total_seconds() / 60 / 60 / 24 # num days
@@ -40,4 +50,4 @@ for submission in submissions:
                 print '\tComment: %s' % comment.permalink
                 print '\tSleeping for 10 minutes\n'
                 time.sleep(600) # sleep for 10 mins
-        #time.sleep(2) # to comply with rate limit
+        #time.sleep(2) # to comply with rate limit  
