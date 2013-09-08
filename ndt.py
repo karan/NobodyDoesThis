@@ -37,7 +37,7 @@ for submission in submissions:
             if (submission.score == 0):
                 # score = 0
                 comment = submission.add_comment('Nope, it\'s just you.')
-                print '\tComment %s added' % comment.permalink
+                print '\tComment: %s' % comment.permalink
                 print '\tSleeping for 10 minutes\n'
                 time.sleep(600) # sleep for 10 mins
         #time.sleep(2) # to comply with rate limit
