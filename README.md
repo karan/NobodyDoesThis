@@ -1,7 +1,7 @@
 NobodyDoesThis
 ==============
 
-Reddit bot that scans week-old /r/DAE posts with 0 upvotes or 0 comments and then comments "Nope, it's just you."
+Reddit bot that scans 3 day-old /r/DoesAnybodyElse posts 0 score and then comments "Nope, it's just you."
 
 settings.cfg
 ============

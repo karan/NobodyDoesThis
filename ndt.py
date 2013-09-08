@@ -23,18 +23,21 @@ print '[*] Login successful...\n'
 dae = r.get_subreddit('DoesAnybodyElse') # praw.objects.Subreddit
 
 print '[*] Getting submissions...\n'
-submissions = dae.get_new(limit=None) # get new posts
+submissions = dae.get_hot(limit=None) # get new posts
+
+alread_done = set()
 
 for submission in submissions:
-    print '[*] Thread: %s' % submission.title
-    created = datetime.fromtimestamp(submission.created_utc) # epoch to datetime
-    diff = (created - datetime.now()).total_seconds()
-    if (diff >= 604800): # post is older than a week
-        if (submission.score == 0) and (not submission.hidden):
-            # score = 0
-            comment = submissions.add_comment('Nope, it\'s just you.')
-            print '\tComment %s added' % comment.permalink
-            submission.hide()
-            #print '[*] Sleeping for 10 minutes\n'
-            #time.sleep(600) # sleep for 10 mins
-    time.sleep(2) # to comply with rate limit
+    if submission.id not in alread_done:
+        alread_done.add(submission.id)
+        print '[*] Thread: %s' % submission.title
+        created = datetime.fromtimestamp(submission.created_utc) # epoch to datetime
+        diff = (datetime.now() - created).total_seconds() / 60 / 60 / 24 # num days
+        if (diff >= 3): # post is older 3 days
+            if (submission.score == 0):
+                # score = 0
+                comment = submission.add_comment('Nope, it\'s just you.')
+                print '\tComment %s added' % comment.permalink
+                print '\tSleeping for 10 minutes\n'
+                time.sleep(600) # sleep for 10 mins
+        #time.sleep(2) # to comply with rate limit
