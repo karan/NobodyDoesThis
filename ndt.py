@@ -9,6 +9,15 @@ import praw
 
 USER_AGENT = '/u/NobodyDoesThis by /u/karangoeluw'
 
+MESSAGE = '''
+Nope, it's just you.
+
+------
+[^NobodyDoesThis](https://github.com/thekarangoel/NobodyDoesThis) \
+^bot ^by [^Karan ^Goel](http://www.goel.im/)
+---
+'''
+
 
 r = praw.Reddit(user_agent=USER_AGENT)
 
@@ -46,8 +55,8 @@ for submission in submissions:
         if (diff >= 3): # post is older 3 days
             if (submission.score == 0):
                 # score = 0
-                comment = submission.add_comment('Nope, it\'s just you.')
+                comment = submission.add_comment(MESSAGE)
                 print '\tComment: %s' % comment.permalink
                 print '\tSleeping for 10 minutes\n'
                 time.sleep(600) # sleep for 10 mins
-        #time.sleep(2) # to comply with rate limit  
+        time.sleep(2) # to comply with rate limit  
