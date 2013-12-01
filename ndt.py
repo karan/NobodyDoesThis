@@ -13,7 +13,7 @@ MESSAGE = '''
 Nope, it's just you.
 
 ------
-[^NobodyDoesThis](https://github.com/thekarangoel/NobodyDoesThis) \
+[^NobodyDoesThis](https://github.com/karan/NobodyDoesThis) \
 ^bot ^by [^Karan ^Goel](http://www.goel.im/)
 ---
 '''
@@ -37,8 +37,9 @@ submissions = dae.get_hot(limit=None) # get new posts
 
 already_done = set()
 
-for submission in submissions:
-    if submission.id not in already_done:
+for _, submission in enumerate(submissions):
+    # skip the first 100 submissions
+    if _ > 100 and submission.id not in already_done:
         already_done.add(submission.id)
         
         comments = submission.comments
@@ -49,7 +50,7 @@ for submission in submissions:
             except AttributeError:
                 pass
         
-        print '[*] Thread: %s' % submission.title
+        print _, '[*] Thread: %s' % submission.title
         created = datetime.fromtimestamp(submission.created_utc) # epoch to datetime
         diff = (datetime.now() - created).total_seconds() / 60 / 60 / 24 # num days
         if (diff >= 3): # post is older 3 days
